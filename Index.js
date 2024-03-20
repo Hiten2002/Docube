@@ -1,4 +1,4 @@
-/*$('#numberError').text('');
+$('#numberError').text('');
 $('#captchaError').text('');
 $('#enterOTP').text('');
 $('#otpError').text('');
@@ -173,7 +173,7 @@ document.getElementById('wf-form-Login-Form').addEventListener('submit', functio
 $("#formnumber").intlTelInput({
     initialCountry: "in",
     separateDialCode: true,
-});*/
+});
 
 
 
