@@ -30,8 +30,11 @@ function render() {
     recaptchaVerifier.render();
     var storedPhoneNumber = localStorage.getItem('phoneNumber');
     if (storedPhoneNumber) {
+
+        $("#mybooking").css('display', 'flex');
         setTimeout(() => {
-            localStorage.removeItem('phoneNumber')
+            localStorage.removeItem('phoneNumber');
+            $("#mybooking").css('display', 'none');
         }, 1 * 60 * 1000);
         return;
     }
@@ -101,7 +104,7 @@ function codeverify() {
             .confirm(code)
             .then(function () {
                 $('#otpError').text('');
-                $('#loginsubmit').css('display', 'block');
+                $('#loginsubmit').css('display', 'flex');
                 $('#verifyOTP').css('display', 'none');
                 $('#resendOTP').css('display', 'none');
             }).catch(function (error) {
@@ -126,7 +129,10 @@ function ReSendLoginOTP() {
     var appVerifier = window.recaptchaVerifier;
     var response = grecaptcha.getResponse();
     $('#numberError').text('');
+    $('.otp-text-field').val('');
     $('#captchaError').text('');
+    $('.otp-text-field').prop('disabled', true);
+    $('.otp-text-field').first().prop('disabled', false);
     if (phoneNumber.length < 1 || response.length == 0) {
         var phoneRegex = /^\+[1-9]{1}[0-9]{10,}$/;
         if (phoneNumber.length < 1) {
@@ -139,7 +145,7 @@ function ReSendLoginOTP() {
             $('#captchaError').text('Please verify you are human!');
         }
     }
-    
+
     else {
         firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
             .then(function (confirmationResult) {
@@ -168,7 +174,11 @@ document.getElementById('wf-form-Login-Form').addEventListener('submit', functio
     localStorage.setItem('phoneNumber', phoneNumber);
     setTimeout(() => {
         localStorage.removeItem('phoneNumber')
+        $("#mybooking").css('display', 'none');
     }, 1 * 60 * 1000);
+    if(localStorage.getItem('phoneNumber')) {
+        $("#mybooking").css('display', 'flex');
+    }
 });
 $("#formnumber").intlTelInput({
     initialCountry: "in",
