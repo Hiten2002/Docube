@@ -35,7 +35,7 @@ function render() {
         setTimeout(() => {
             localStorage.removeItem('phoneNumber');
             $("#mybooking").css('display', 'none');
-        }, 1 * 60 * 1000);
+        }, 24 * 60 * 60 * 1000);
         return;
     }
 }
@@ -175,7 +175,7 @@ document.getElementById('wf-form-Login-Form').addEventListener('submit', functio
     setTimeout(() => {
         localStorage.removeItem('phoneNumber')
         $("#mybooking").css('display', 'none');
-    }, 1 * 60 * 1000);
+    }, 24 * 60 * 60 * 1000);
     if(localStorage.getItem('phoneNumber')) {
         $("#mybooking").css('display', 'flex');
     }
