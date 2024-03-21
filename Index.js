@@ -42,7 +42,7 @@ function render() {
 function sendOTP() {
     var inputPhone = $("#formnumber").val();
     var countryCode = $("#formnumber").intlTelInput("getSelectedCountryData").dialCode;
-    var phoneNumber = '+' + countryCode + inputPhone;
+    var phoneNumber = '+91' + inputPhone;
     console.log(phoneNumber);
     var appVerifier = window.recaptchaVerifier;
     var response = grecaptcha.getResponse();
