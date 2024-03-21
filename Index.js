@@ -7,14 +7,14 @@ $('.otp').css('display', 'none');
 $('#verifyOTP').css('display', 'none');
 $('#resendOTP').css('display', 'none');
 const firebaseConfig = {
-    apiKey: "AIzaSyB6mfkSUSzlHR8q6yngtopYMUgxtleeJRA",
-    authDomain: "webflow-login-402609.firebaseapp.com",
-    projectId: "webflow-login-402609",
-    storageBucket: "webflow-login-402609.appspot.com",
-    messagingSenderId: "87228908672",
-    appId: "1:87228908672:web:82e2a9a8dd2c0e4bc5d265",
-    measurementId: "G-JN8CEFTW9J"
-};
+    apiKey: "AIzaSyBVS0USwTjIiAhhk0OPkOpJx2ov-kDc73A",
+    authDomain: "docube-sarvadhi.firebaseapp.com",
+    projectId: "docube-sarvadhi",
+    storageBucket: "docube-sarvadhi.appspot.com",
+    messagingSenderId: "17981617263",
+    appId: "1:17981617263:web:87dfc45e227d38c601c99a",
+    measurementId: "G-LGYGS1SWS0"
+  };
 firebase.initializeApp(firebaseConfig);
 render();
 function render() {
@@ -35,7 +35,7 @@ function render() {
         setTimeout(() => {
             localStorage.removeItem('phoneNumber');
             $("#mybooking").css('display', 'none');
-        }, 24 * 60 * 60 * 1000);
+        }, 1 * 60 * 1000);
         return;
     }
 }
@@ -175,7 +175,7 @@ document.getElementById('wf-form-Login-Form').addEventListener('submit', functio
     setTimeout(() => {
         localStorage.removeItem('phoneNumber')
         $("#mybooking").css('display', 'none');
-    }, 24 * 60 * 60 * 1000);
+    }, 1 * 60 * 1000);
     if(localStorage.getItem('phoneNumber')) {
         $("#mybooking").css('display', 'flex');
     }
@@ -263,3 +263,49 @@ otp.forEach(input => {
         }
     });
 });
+
+
+$(document).ready(function() {
+    
+    $('#book-appointment-button').click(function(e) {
+        var service = $('#selectBox').val();
+        var location = $('#locationBox').val();
+        var storedNumClick = localStorage.getItem('phoneNumber');
+        
+        if (service !== null && location !== null && storedNumClick === null) {
+            $('#loginformbox').css('display', 'flex');
+            $('input.benefits-button-primary').attr('type', 'submit');
+            e.preventDefault(); // Prevent the default form submission
+        } else if (service !== null && location !== null && storedNumClick !== null) {
+            // Auto-submit the form here
+            $('#appointment-form').submit();
+            $('input.benefits-button-primary').attr('type', 'submit'); // Add type="submit" attribute
+        } else {
+            $('#error-message').text('Please fill in all fields.');
+        }
+    });
+});
+
+
+function changeType() {
+    console.log("changeType()");
+    var loginFormBox = document.getElementById("loginformbox");
+    if (loginFormBox) {
+        loginFormBox.style.display = "none"; // Hide the login form box if it exists
+    }
+}
+
+/*function changeType() {
+    console.log("changeType()");
+    var loginFormBox = document.getElementById("loginformbox");
+    if (loginFormBox) {
+        loginFormBox.style.display = "none"; // Hide the login form box if it exists
+    }
+    console.log("changeType()");
+    
+    var bookAppointmentButton = document.getElementById("book-appointment-button");
+    if (bookAppointmentButton) {
+        bookAppointmentButton.click(); // Trigger click event on the "Book Appointment" button if it exists
+    }
+    console.log("bookAppointmentButton");
+}*/
