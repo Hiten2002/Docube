@@ -288,24 +288,17 @@ $(document).ready(function() {
 
 
 function changeType() {
-    console.log("changeType()");
     var loginFormBox = document.getElementById("loginformbox");
+    var bookButtons = document.getElementsByClassName("data");
     if (loginFormBox) {
-        loginFormBox.style.display = "none"; // Hide the login form box if it exists
+        loginFormBox.style.display = "none";
+        for (var i = 0; i < bookButtons.length; i++) {
+            bookButtons[i].style.display = "none"; // Hide each book button
+        }
+    }
+
+    var loadButtons = document.getElementsByClassName("load");
+    for (var i = 0; i < loadButtons.length; i++) {
+        loadButtons[i].click(); // Trigger click event on each load button
     }
 }
-
-/*function changeType() {
-    console.log("changeType()");
-    var loginFormBox = document.getElementById("loginformbox");
-    if (loginFormBox) {
-        loginFormBox.style.display = "none"; // Hide the login form box if it exists
-    }
-    console.log("changeType()");
-    
-    var bookAppointmentButton = document.getElementById("book-appointment-button");
-    if (bookAppointmentButton) {
-        bookAppointmentButton.click(); // Trigger click event on the "Book Appointment" button if it exists
-    }
-    console.log("bookAppointmentButton");
-}*/
