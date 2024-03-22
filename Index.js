@@ -265,14 +265,15 @@ otp.forEach(input => {
 });
 
 
-$(document).ready(function() {
+/*$(document).ready(function() {
     
     $('#book-appointment-button').click(function(e) {
         var service = $('#selectBox').val();
         var location = $('#locationBox').val();
         var storedNumClick = localStorage.getItem('phoneNumber');
-        
+        console.log(1)
         if (service !== null && location !== null && storedNumClick === null) {
+            console.log(2)
             $('#loginformbox').css('display', 'flex');
             $('input.benefits-button-primary').attr('type', 'submit');
             e.preventDefault(); // Prevent the default form submission
@@ -282,6 +283,46 @@ $(document).ready(function() {
             $('input.benefits-button-primary').attr('type', 'submit'); // Add type="submit" attribute
         } else {
             $('#error-message').text('Please fill in all fields.');
+        }
+    });
+});*/
+$(document).ready(function() {
+    $('#book-appointment-button').click(function(e) {
+        var service = $('#selectBox').val();
+        var location = $('#locationBox').val();
+        var datebox = $('#datebox').val();
+        var storedNumClick = localStorage.getItem('phoneNumber');
+        
+        // Reset error messages
+        $('#select-box-error').text('');
+        $('#location-box-error').text('');
+        $('#date-box-error').text('');
+        
+        if (service === null) {
+            $('#select-box-error').text('Please select a service');
+            e.preventDefault(); // Prevent the default form submission
+            return; // Stop further execution
+        }
+
+        if (location === null) {
+            $('#location-box-error').text('Please select a location');
+            e.preventDefault(); // Prevent the default form submission
+            return; // Stop further execution
+        }
+
+        if (datebox === '') {
+            $('#date-box-error').text('Please select a date');
+            e.preventDefault(); // Prevent the default form submission
+            return; // Stop further execution
+        }
+
+        if (storedNumClick === null) {
+            $('#loginformbox').css('display', 'flex');
+            $('input.benefits-button-primary').attr('type', 'submit');
+            e.preventDefault(); // Prevent the default form submission
+        } else {
+            // Auto-submit the form here
+            $('#appointment-form').submit();
         }
     });
 });
