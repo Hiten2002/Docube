@@ -317,7 +317,7 @@ $(document).ready(function() {
         }
 
         if (storedNumClick === null) {
-            $('#loginformbox').css('display', 'flex');
+            $('#loginformbox').css('display', 'block');
             $('input.benefits-button-primary').attr('type', 'submit');
             e.preventDefault(); // Prevent the default form submission
         } else {
