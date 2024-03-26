@@ -37,7 +37,7 @@ function render() {
             localStorage.removeItem('phoneNumber');
             $("#mybooking").css('display', 'none');
             $("#mybookingres").css('display', 'none');
-        }, 1 * 60 * 1000);
+        }, 1 * 60 * 60 * 24 * 7 * 1000);
         return;
     }
 }
@@ -178,7 +178,7 @@ document.getElementById('wf-form-Login-Form').addEventListener('submit', functio
         localStorage.removeItem('phoneNumber')
         $("#mybooking").css('display', 'none');
          $("#mybookingres").css('display', 'none');
-    }, 1 * 60 * 1000);
+    }, 1 * 60 * 60 * 24 * 7 * 1000);
     if(localStorage.getItem('phoneNumber')) {
         $("#mybooking").css('display', 'flex');
          $("#mybookingres").css('display', 'flex');
