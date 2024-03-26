@@ -347,3 +347,21 @@ function changeType() {
         loadButtons[i].click(); // Trigger click event on each load button
     }
 }
+
+
+document.getElementById('selectBox').addEventListener('change', function() {
+  var selectedValue = this.value;
+  var video = document.getElementById('video');
+  var consultation = document.getElementById('consultation');
+
+  if (selectedValue === 'Video Consultation') {
+    video.style.display = 'flex';
+    consultation.style.display = 'none';
+  } else if (selectedValue === 'For In-Person Consultation') {
+    video.style.display = 'none';
+    consultation.style.display = 'flex';
+  } else {
+    video.style.display = 'none';
+    consultation.style.display = 'none';
+  }
+});
