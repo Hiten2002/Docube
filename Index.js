@@ -32,9 +32,11 @@ function render() {
     if (storedPhoneNumber) {
 
         $("#mybooking").css('display', 'flex');
+        $("#mybookingres").css('display', 'flex');
         setTimeout(() => {
             localStorage.removeItem('phoneNumber');
             $("#mybooking").css('display', 'none');
+            $("#mybookingres").css('display', 'none');
         }, 1 * 60 * 1000);
         return;
     }
@@ -175,9 +177,11 @@ document.getElementById('wf-form-Login-Form').addEventListener('submit', functio
     setTimeout(() => {
         localStorage.removeItem('phoneNumber')
         $("#mybooking").css('display', 'none');
+         $("#mybookingres").css('display', 'none');
     }, 1 * 60 * 1000);
     if(localStorage.getItem('phoneNumber')) {
         $("#mybooking").css('display', 'flex');
+         $("#mybookingres").css('display', 'flex');
     }
 });
 $("#formnumber").intlTelInput({
