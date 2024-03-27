@@ -14,7 +14,7 @@ const firebaseConfig = {
     messagingSenderId: "17981617263",
     appId: "1:17981617263:web:87dfc45e227d38c601c99a",
     measurementId: "G-LGYGS1SWS0"
-  };
+};
 firebase.initializeApp(firebaseConfig);
 render();
 function render() {
@@ -177,11 +177,11 @@ document.getElementById('wf-form-Login-Form').addEventListener('submit', functio
     setTimeout(() => {
         localStorage.removeItem('phoneNumber')
         $("#mybooking").css('display', 'none');
-         $("#mybookingres").css('display', 'none');
+        $("#mybookingres").css('display', 'none');
     }, 1 * 60 * 60 * 24 * 7 * 1000);
-    if(localStorage.getItem('phoneNumber')) {
+    if (localStorage.getItem('phoneNumber')) {
         $("#mybooking").css('display', 'flex');
-         $("#mybookingres").css('display', 'flex');
+        $("#mybookingres").css('display', 'flex');
     }
 });
 $("#formnumber").intlTelInput({
@@ -290,18 +290,18 @@ otp.forEach(input => {
         }
     });
 });*/
-$(document).ready(function() {
-    $('#book-appointment-button').click(function(e) {
+$(document).ready(function () {
+    $('#book-appointment-button').click(function (e) {
         var service = $('#selectBox').val();
         var location = $('#locationBox').val();
         var datebox = $('#datebox').val();
         var storedNumClick = localStorage.getItem('phoneNumber');
-        
+
         // Reset error messages
         $('#select-box-error').text('');
         $('#location-box-error').text('');
         $('#date-box-error').text('');
-        
+
         if (service === null) {
             $('#select-box-error').text('Please select a service');
             e.preventDefault(); // Prevent the default form submission
@@ -349,19 +349,19 @@ function changeType() {
 }
 
 
-document.getElementById('selectBox').addEventListener('change', function() {
-  var selectedValue = this.value;
-  var video = document.getElementById('video');
-  var consultation = document.getElementById('consultation');
+document.getElementById('selectBox').addEventListener('change', function () {
+    var selectedValue = this.value;
+    var video = document.getElementById('video');
+    var consultation = document.getElementById('consultation');
 
-  if (selectedValue === 'Video Consultation') {
-    video.style.display = 'flex';
-    consultation.style.display = 'none';
-  } else if (selectedValue === 'For In-Person Consultation') {
-    video.style.display = 'none';
-    consultation.style.display = 'flex';
-  } else {
-    video.style.display = 'none';
-    consultation.style.display = 'none';
-  }
+    if (selectedValue === 'Video Consultation') {
+        video.style.display = 'flex';
+        consultation.style.display = 'none';
+    } else if (selectedValue === 'For In-Person Consultation') {
+        video.style.display = 'none';
+        consultation.style.display = 'flex';
+    } else {
+        video.style.display = 'none';
+        consultation.style.display = 'none';
+    }
 });
