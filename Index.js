@@ -292,43 +292,64 @@ otp.forEach(input => {
 });*/
 $(document).ready(function () {
     $('#book-appointment-button').click(function (e) {
-        var service = $('#selectBox').val();
+        var patientname = $('#patientName').val();
         var location = $('#locationBox').val();
+        var service = $('#selectBox').val();
         var datebox = $('#datebox').val();
         var storedNumClick = localStorage.getItem('phoneNumber');
 
-        // Reset error messages
+        // Reset error messages and input field styles
+        $('#patient-box-error').text('');
         $('#select-box-error').text('');
         $('#location-box-error').text('');
         $('#date-box-error').text('');
+        $('#radio-box-error').text('');
+
+        if (patientname === '') {
+          $('#patient-box-error').text('Please enter patient name');
+          $('#patientName').addClass('error');
+          e.preventDefault(); // Prevent the default form submission
+          return; // Stop further execution
+        }
 
         if (service === null) {
-            $('#select-box-error').text('Please select a service');
-            e.preventDefault(); // Prevent the default form submission
-            return; // Stop further execution
+          $('#select-box-error').text('Please select a service');
+          $('#selectBox').addClass('error');
+          e.preventDefault(); // Prevent the default form submission
+          return; // Stop further execution
         }
 
         if (location === null) {
-            $('#location-box-error').text('Please select a location');
-            e.preventDefault(); // Prevent the default form submission
-            return; // Stop further execution
+          $('#location-box-error').text('Please select a location');
+          $('#locationBox').addClass('error');
+          e.preventDefault(); // Prevent the default form submission
+          return; // Stop further execution
         }
 
         if (datebox === '') {
-            $('#date-box-error').text('Please select a date');
-            e.preventDefault(); // Prevent the default form submission
-            return; // Stop further execution
+          $('#date-box-error').text('Please select a date');
+          $('#datebox').addClass('error');
+          e.preventDefault(); // Prevent the default form submission
+          return; // Stop further execution
         }
 
-        if (storedNumClick === null) {
-            $('#loginformbox').css('display', 'block');
-            $('input.benefits-button-primary').attr('type', 'submit');
-            e.preventDefault(); // Prevent the default form submission
-        } else {
-            // Auto-submit the form here
-            $('#appointment-form').submit();
+        if (!$('.timeslotinput').is(':checked')) {
+          $('#radio-box-error').text('Please select a time slot'); // Corrected id reference
+          $('.timeslotinput').addClass('error');
+          e.preventDefault(); // Prevent the default form submission
+          return; // Stop further execution
         }
-    });
+
+
+        if (storedNumClick === null) {
+          $('#error').text('Please log in to proceed with booking.');
+          e.preventDefault(); // Prevent the default form submission
+          return; // Stop further execution
+        } else {
+          // Auto-submit the form here
+          $('#appointment-form').submit();
+        }
+      });
 });
 
 
