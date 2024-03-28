@@ -271,53 +271,60 @@ otp.forEach(input => {
 $(document).ready(function () {
     $('#book-appointment-button').click(function (e) {
         var patientname = $('#patientName').val();
-        var service = $('#selectBox').val();
         var location = $('#locationBox').val();
+        var service = $('#selectBox').val();
         var datebox = $('#datebox').val();
         var storedNumClick = localStorage.getItem('phoneNumber');
 
-        // Reset error messages
+        // Reset error messages and input field styles
         $('#patient-box-error').text('');
         $('#select-box-error').text('');
         $('#location-box-error').text('');
         $('#date-box-error').text('');
-        $('#timeslot-box-error').text('');
+        $('#radio-box-error').text('');
 
-        if (patientname.trim() === '') {
+        if (patientname === '') {
             $('#patient-box-error').text('Please enter patient name');
-            e.preventDefault();
-            return;
+            $('#patientName').addClass('error');
+            e.preventDefault(); // Prevent the default form submission
+            return; // Stop further execution
         }
 
-        if (service === null || service.trim() === '') {
+        if (service === null) {
             $('#select-box-error').text('Please select a service');
-            e.preventDefault();
-            return;
+            $('#selectBox').addClass('error');
+            e.preventDefault(); // Prevent the default form submission
+            return; // Stop further execution
         }
 
-        if (location === null || location.trim() === '') {
+        if (location === null) {
             $('#location-box-error').text('Please select a location');
-            e.preventDefault();
-            return;
+            $('#locationBox').addClass('error');
+            e.preventDefault(); // Prevent the default form submission
+            return; // Stop further execution
         }
 
-        if (datebox.trim() === '') {
+        if (datebox === '') {
             $('#date-box-error').text('Please select a date');
-            e.preventDefault();
-            return;
+            $('#datebox').addClass('error');
+            e.preventDefault(); // Prevent the default form submission
+            return; // Stop further execution
         }
 
-        if ($('.timeslotinput:checked').length === 0) {
-            $('#timeslot-box-error').text('Please select a time slot');
-            e.preventDefault();
-            return;
+        if (!$('.timeslotinput').is(':checked')) {
+            $('#radio-box-error').text('Please select a time slot'); // Corrected id reference
+            $('.timeslotinput').addClass('error');
+            e.preventDefault(); // Prevent the default form submission
+            return; // Stop further execution
         }
+
 
         if (storedNumClick === null) {
-            $('#loginformbox').css('display', 'block');
-            $('input.benefits-button-primary').attr('type', 'submit');
-            e.preventDefault();
+            $('#loginformbox').css('display', 'flex');
+            e.preventDefault(); // Prevent the default form submission
+            return; // Stop further execution
         } else {
+            // Auto-submit the form here
             $('#appointment-form').submit();
         }
     });
