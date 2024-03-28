@@ -320,7 +320,7 @@ $(document).ready(function () {
 
 
         if (storedNumClick === null) {
-            $('#loginformbox').css('display', 'flex');
+            $('#loginformbox').css('display', 'block');
             e.preventDefault(); // Prevent the default form submission
             return; // Stop further execution
         } else {
