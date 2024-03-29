@@ -338,13 +338,10 @@ $(document).ready(function () {
     }
 
      // Event listener to clear errors when any input field is focused
-     $('input').on('input', function () {
+     $('input , select').on('input , select', function () {
+        console.log("input");
         $(this).next('.error').text('');
-    });
-
-    // Event listener to clear errors when any input field is focused
-    $('select').on('select', function () {
-        $(this).next('.error').text('');
+        console.log("input-2");
     });
     
     $('#book-appointment-button').click(function (e) {
@@ -363,16 +360,25 @@ $(document).ready(function () {
 
         // Validate patient name, location, service, and date
         if (patientname === '') {
+            console.log("patientname");
             $('#patient-box-error').text('Please enter patient name');
+            console.log("patientname-1");
             errors = true;
+            console.log("patientname-2");
         }
         if (location === null) {
+            console.log("location");
             $('#location-box-error').text('Please select a location');
+            console.log("location-1");
             errors = true;
+            console.log("location-2");
         }
         if (service === null) {
+            console.log("service");
             $('#select-box-error').text('Please select a service');
+            console.log("service-1");
             errors = true;
+            console.log("service-2");
         }
         if (datebox === '') {
             $('#date-box-error').text('Please select a date');
