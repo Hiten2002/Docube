@@ -439,7 +439,7 @@ function changeType() {
   var loginFormBox = document.getElementById("loginformbox");
   var bookButtons = document.getElementsByClassName("data");
   var dataloader = document.getElementById("dataloader");
-  //if (loginFormBox) {
+
 
   loginFormBox.style.display = "none";
   dataloader.style.display = "block";
@@ -447,7 +447,6 @@ function changeType() {
   for (var i = 0; i < bookButtons.length; i++) {
     bookButtons[i].style.display = "none"; // Hide each book button
   }
-  // }
 
   function hideBlock() {
     dataloader.style.display = "none";
@@ -458,6 +457,21 @@ function changeType() {
 }
     setTimeout(hideBlock, 4000);
     
+}
+
+function submitbtn() {
+    var mybooking = document.getElementById("mybooking");
+    var dataloader = document.getElementById("dataloader");
+    var appointmentsuccess = document.getElementById("appointment-success-data");
+
+    if (getComputedStyle(mybooking).display === "block") {
+        dataloader.style.display = "block";
+
+        setTimeout(function() {
+            dataloader.style.display = "none";
+            appointmentsuccess.style.display = "block";
+        }, 4000);
+    }
 }
 
 document.getElementById("selectBox").addEventListener("change", function () {
