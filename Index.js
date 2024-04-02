@@ -416,21 +416,14 @@ $(document).ready(function () {
         }
 
         // Check if all fields are filled and storedPhoneNumber is null
-        // if (errors === false) {
-        //     if (!$(".timeslotinput").is(":checked")) {
-        //         $("#radio-box-error").text("Please select a time slot");
-        //         // errors = true;
-        //     }
-        //     else {
-        //         $("#radio-box-error").text("");
-        //     }
-        // }
-        if (!$(".timeslotinput").is(":checked")) {
-            $("#radio-box-error").text("Please select a time slot");
-            // errors = true;
-        }
-        else {
-            $("#radio-box-error").text("");
+        if (errors === false) {
+            if (!$(".timeslotinput").is(":checked")) {
+                $("#radio-box-error").text("Please select a time slot");
+                // errors = true;
+            }
+            else {
+                $("#radio-box-error").text("");
+            }
         }
 
         // Check if all fields are filled and storedPhoneNumber is null
