@@ -115,14 +115,15 @@
                 });
             });
 
-            // $(".timeslotinput").on("change", function () {
-            //     var timeslot = $(".timeslotinput");
-            //     if (timeslot.val() != "") {
-            //         $("#radio-box-error").text("");
-            //         console.log(timeslot.val());
-            //     }
-            //     console.log(timeslot.val());
-            // });
+            $(document).on("change", 'input[type="radio"]', function () {
+                console.log("print");
+                var timeslot = $(".timeslotinput");
+                if ($(".timeslotinput").is(":checked")) {
+                    $("#radio-box-error").text("");
+                    console.log(timeslot.val());
+                }
+                console.log(timeslot.val());
+            });
 
             $('#book-appointment-button').click(function (e) {
                 e.preventDefault(); // Prevent default form submission
@@ -160,13 +161,15 @@
                 }
 
                 // Check if all fields are filled and storedPhoneNumber is null
-                if (errors === false) {
-                    // Show timeslotInput error if not checked
+                if(patientname == location ){
                     if (!$('.timeslotinput').is(':checked')) {
                         $('#radio-box-error').text('Please select a time slot');
                         errors = true;
                     }
+
+
                 }
+
 
                 // Check if all fields are filled and storedPhoneNumber is null
                 if (errors === false && storedPhoneNumber === null) {
