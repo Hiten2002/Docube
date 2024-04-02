@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Booking Form</title>
+    <style>
+        .error {
+            color: red;
+        }
+
+        .error-field {
+            border: 1px solid red;
+        }
+
+        #loginformbox {
+            width: 500px;
+            height: 500px;
+            background-color: aquamarine;
+        }
+    </style>
+</head>
+
+<body>
+
+    <form id="appointment-form" action="submit_action.php" method="POST">
+        <div>
+            <label for="patientName">Patient Name:</label>
+            <input type="text" id="patientName" class="appointment-consult-field">
+            <span id="patient-box-error" class="error"></span>
+        </div>
+
+        <label for="locationBox">Location:</label>
+        <select class="appointment-consult-field" required="" name="Location" id="locationBox">
+            <option value="" disabled="" selected="">Location</option>
+            <option value="Docube Healthcare Koramangala" id="ff80808181b769a70181c3b3906c0dc4">Docube
+                Healthcare Koramangala</option>
+            <option value="Docube Healthcare Whitefield" id="ff80808186749c930186b6d1b4d40c4b">Docube
+                Healthcare Whitefield</option>
+        </select>
+        <p id="location-box-error" class="error"></p>
+
+        <label for="selectBox">Select Service:</label>
+        <select class="appointment-consult-field" required="" name="Service" id="selectBox">
+            <option value="" disabled="" selected="">Service</option>
+            <option value="For In-Person Consultation" id="ff8080818e11a54a018e50d2234e4017">For In-Person
+                Consultation</option>
+            <option value="Video Consultation" id="ff8080818e11a560018e50d287dd08d9">Video Consultation</option>
+        </select>
+        <p id="select-box-error" class="error"></p>
+        <div>
+            <label for="datebox">Select Date:</label>
+            <input type="date" id="datebox" class="appointment-consult-field">
+            <span id="date-box-error" class="error"></span>
+        </div>
+        <div>
+            <label for="timeslot">Select Time Slot:</label><br>
+            <div id="radiobuttondata" class="radiobuttondata">
+                <input class="timeslotinput" type="radio" name="timeslot" id="timeslot-29-03-2024-0" value="5:30 PM"
+                    required="">
+                <label class="timeslotlabel" for="timeslot-29-03-2024-0">5:30 PM</label>
+                <br>
+                <input class="timeslotinput" type="radio" name="timeslot" id="timeslot-29-03-2024-1" value="5:45 PM"
+                    required="">
+                <label class="timeslotlabel" for="timeslot-29-03-2024-1">5:45 PM</label>
+                <br><input class="timeslotinput" type="radio" name="timeslot" id="timeslot-29-03-2024-2" value="6:00 PM"
+                    required=""><label class="timeslotlabel" for="timeslot-29-03-2024-2">6:00 PM</label><br><input
+                    class="timeslotinput" type="radio" name="timeslot" id="timeslot-29-03-2024-3" value="6:15 PM"
+                    required=""><label class="timeslotlabel" for="timeslot-29-03-2024-3">6:15 PM</label><br><input
+                    class="timeslotinput" type="radio" name="timeslot" id="timeslot-29-03-2024-4" value="6:30 PM"
+                    required=""><label class="timeslotlabel" for="timeslot-29-03-2024-4">6:30 PM</label><br><input
+                    class="timeslotinput" type="radio" name="timeslot" id="timeslot-29-03-2024-5" value="6:45 PM"
+                    required=""><label class="timeslotlabel" for="timeslot-29-03-2024-5">6:45 PM</label><br><input
+                    class="timeslotinput" type="radio" name="timeslot" id="timeslot-29-03-2024-6" value="7:00 PM"
+                    required=""><label class="timeslotlabel" for="timeslot-29-03-2024-6">7:00 PM</label><br><input
+                    class="timeslotinput" type="radio" name="timeslot" id="timeslot-29-03-2024-7" value="7:15 PM"
+                    required=""><label class="timeslotlabel" for="timeslot-29-03-2024-7">7:15 PM</label><br>
+            </div>
+        </div>
+        <span id="radio-box-error" class="error"></span>
+        <button id="book-appointment-button" type="submit">Book Appointment</button>
+    </form>
+
+    <div id="loginformbox" style="display: none;">
+        <!-- Your login form content here -->
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Function to clear errors messages
+            function clearErrors() {
+                $('#patient-box-error, #location-box-error, #select-box-error, #date-box-error').text('');
+                $('#radio-box-error').text('');
+            }
+
+            // Event listener to clear errors when any input field is focused
+            $('input, select').on('input', function () {
+                $(this).next('.error').text('');
+            });
+
+            var radioButtons = document.querySelectorAll('input[name="timeslot"]');
+            var radioForm = document.getElementById("book-appointment-form");
+
+            radioButtons.forEach(function (radioButton) {
+                radioButton.addEventListener("change", function () {
+                    var selectedOption = document.querySelector('input[name="timeslot"]:checked');
+                    if (!selectedOption) {
+                        // errorDiv.textContent = "Please select an option";
+                        $('#radio-box-error').text('Please select a time slot');
+                    } else {
+                        errorDiv.textContent = "";
+                    }
+                });
+            });
+
+            // $(".timeslotinput").on("change", function () {
+            //     var timeslot = $(".timeslotinput");
+            //     if (timeslot.val() != "") {
+            //         $("#radio-box-error").text("");
+            //         console.log(timeslot.val());
+            //     }
+            //     console.log(timeslot.val());
+            // });
+
+            $('#book-appointment-button').click(function (e) {
+                e.preventDefault(); // Prevent default form submission
+
+                var errors = false; // Flag to track errors
+
+                var patientname = $('#patientName').val();
+                var location = $('#locationBox').val();
+                var service = $('#selectBox').val();
+                var datebox = $('#datebox').val();
+                var storedPhoneNumber = localStorage.getItem('phoneNumber');
+
+                clearErrors(); // Clear any previous errors
+
+                // Validate patient name, location, service, and date
+                if (patientname === '') {
+                    $('#patient-box-error').text('Please enter patient name');
+                    errors = true;
+                }
+                if (location === null) {
+                    console.log("location");
+                    $('#location-box-error').text('Please select a location'); // Corrected selector
+                    errors = true;
+                }
+                console.log("location");
+                if (service === null) {
+                    console.log("service");
+                    $('#select-box-error').text('Please select a service'); // Corrected selector
+                    errors = true;
+                }
+                console.log("service");
+                if (datebox === '') {
+                    $('#date-box-error').text('Please select a date');
+                    errors = true;
+                }
+
+                // Check if all fields are filled and storedPhoneNumber is null
+                if (errors === false) {
+                    // Show timeslotInput error if not checked
+                    if (!$('.timeslotinput').is(':checked')) {
+                        $('#radio-box-error').text('Please select a time slot');
+                        errors = true;
+                    }
+                }
+
+                // Check if all fields are filled and storedPhoneNumber is null
+                if (errors === false && storedPhoneNumber === null) {
+                    $('#loginformbox').css('display', 'block');
+                    errors = true;
+                }
+
+                if (errors === false) {
+                    // Auto-submit the form here
+                    $('#appointment-form').submit();
+                }
+            });
+        });
+
+    </script>
+
+</body>
+
+</html>
