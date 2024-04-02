@@ -363,7 +363,7 @@ $(document).ready(function () {
         console.log(datebox.val());
     });
 
-    $('input[type="radio"]').on("change", function () {
+    $(document).on("change", 'input[type="radio"]', function () {
         console.log("print");
         var timeslot = $(".timeslotinput");
         if ($(".timeslotinput").is(":checked")) {
