@@ -419,7 +419,7 @@ $(document).ready(function () {
         if (errors === false) {
             if (!$(".timeslotinput").is(":checked")) {
                 $("#radio-box-error").text("Please select a time slot");
-                // errors = true;
+                errors = true;
             }
             else {
                 $("#radio-box-error").text("");
