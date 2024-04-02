@@ -113,6 +113,8 @@ function codeverify() {
         $("#loginsubmit").css("display", "flex");
         $("#verifyOTP").css("display", "none");
         $("#resendOTP").css("display", "none");
+
+        $("#sub").click();
       })
       .catch(function (error) {
         console.error("Error occurred:", error);
@@ -128,6 +130,7 @@ function codeverify() {
       });
   }
 }
+
 function ReSendLoginOTP() {
   var inputPhone = $("#formnumber").val();
   var countryCode = $("#formnumber").intlTelInput(
@@ -435,6 +438,15 @@ $(document).ready(function () {
 //         loadButtons[i].click(); // Trigger click event on each load button
 //     }
 // }
+document.addEventListener("DOMContentLoaded", function() {
+    var loginForm = document.getElementById("wf-form-Login-Form");
+    loginForm.addEventListener("submit", function(event) {
+      event.preventDefault(); // Prevent the default form submission behavior
+      changeType(); // Call the changeType function
+    });
+  });
+  
+
 function changeType() {
   var loginFormBox = document.getElementById("loginformbox");
   var bookButtons = document.getElementsByClassName("data");
@@ -462,13 +474,17 @@ function changeType() {
 function submitbtn() {
     var mybooking = document.getElementById("mybooking");
     var dataloader = document.getElementById("dataloader");
-    var appointmentsuccess = document.getElementById("appointment-success-data");
+    var appointmentsuccess = document.getElementById("appointmentsuccess");
 
-    if (getComputedStyle(mybooking).display === "block") {
+    // Check if mybooking is initially set to display: block
+    if (getComputedStyle(mybooking).display === "flex") {
+        // If mybooking is visible, show the dataloader
         dataloader.style.display = "block";
 
+        // Hide the dataloader after 4 seconds
         setTimeout(function() {
             dataloader.style.display = "none";
+            // Show appointmentsuccess after 4 seconds
             appointmentsuccess.style.display = "block";
         }, 4000);
     }
@@ -490,175 +506,3 @@ document.getElementById("selectBox").addEventListener("change", function () {
     consultation.style.display = "none";
   }
 });
-
-// document.getElementById('wf-form-Login-Form').addEventListener('submit', function (event) {
-//     event.preventDefault(); // Prevent the form from submitting normally
-
-//     // Get the search string entered by the user
-//     const searchString = document.getElementById('formnumber').value.trim();
-
-//     // If the search string is empty, display an error message
-//     if (!searchString) {
-//         alert('Please enter a search string.');
-//         return;
-//     }
-
-//     // Make a request to the API endpoint
-//     fetch('https://api.continuouscare.in/e-api/v1.0/administration/patient/search', {
-//         method: 'POST',
-//         headers: {
-//             'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlaWQiOjI1NzExLCJ1aWQiOjQ5NDg5OCwiYXVkIjpbImNjX2FwaSJdLCJjdWlkIjpudWxsLCJldWlkIjoiYjRhNWQ3MjEtN2UzYS00MDQ4LThhODYtZTFmMjkyYmU4YzVmIiwib3VpZCI6IjI5ODE0MWFhLTE0ZjgtNDViYi05YjdkLTM5NTczMzJjOGZiNCIsInVzZXJfbmFtZSI6IiR1c2VySWQ6NDk0ODk4I3R5cGU6RU1QTE9ZRUUiLCJzY29wZSI6WyJFTVBMT1lFRSJdLCJ1dWlkIjoiNzVmNDJlYjItNTc5ZC00NGNmLWJiOTUtZjBiNWZkOTk5NjJhIiwianRpIjoiYTdiYWZjNzMtMWEyZC00MzJmLTllMDQtM2JmZmE3ZDU2YWM5IiwiY2xpZW50X2lkIjoicHJvdmlkZXJfd2ViIiwiY2lkIjpudWxsfQ.phlFjN6PW4hNeLDVZPdbVOGkYx8rOZcr0pNK5eip830',
-//             'Content-Type': 'application/json',
-//             'Cookie': 'AWSALB=ee+XsdR9tTEcuqKbBvtJUR3SeLL0YZCz6AA4+21gMYWyGIH73olZmW+OaiSzDqCuwIr5DxGqbHAnPIlHrMKeYSFrfKgqGKZkrC1KAPFkS5y2jWTo370hT/OdP58A; AWSALBCORS=ee+XsdR9tTEcuqKbBvtJUR3SeLL0YZCz6AA4+21gMYWyGIH73olZmW+OaiSzDqCuwIr5DxGqbHAnPIlHrMKeYSFrfKgqGKZkrC1KAPFkS5y2jWTo370hT/OdP58A; SESSION=417e6ca9-82e2-4cae-8515-03a08b0c8a90'
-//         },
-//         body: JSON.stringify({
-//             orgId: '298141aa-14f8-45bb-9b7d-3957332c8fb4',
-//             searchString: searchString
-//         })
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//         console.log(searchString);
-
-//             // If no patient is found, display an error message
-//             if (data.patients.length === 0) {
-//                 console.log("No patient found with the provided search string.");
-//                 return;
-//             }
-
-//             const userUuid = data.patients[0].userUuid;
-
-//             // Save userUuid to local storage
-//             localStorage.setItem('userUuid', userUuid);
-
-//             // Display patient data in the console
-//             console.log(data.patients[0]);
-//         })
-//         .catch(error => {
-//             // Log any errors to the console
-//             console.error('Error:', error);
-//         });
-// });
-
-// document.getElementById('wf-form-Login-Form').addEventListener('submit', function (event) {
-//     event.preventDefault(); // Prevent form submission
-
-//     const firstNameData = document.getElementById('patientName').value.trim();
-//     const phoneNumberData = document.getElementById('formnumber').value.trim();
-
-//     const createPatientUrl = 'https://ccapi.continuouscare.in/e-api/v1.0/administration/patient/create';
-//     const searchPatientUrl = 'https://api.continuouscare.in/e-api/v1.0/administration/patient/search';
-//     const token = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlaWQiOjI1NzExLCJ1aWQiOjQ5NDg5OCwiYXVkIjpbImNjX2FwaSJdLCJjdWlkIjpudWxsLCJldWlkIjoiYjRhNWQ3MjEtN2UzYS00MDQ4LThhODYtZTFmMjkyYmU4YzVmIiwib3VpZCI6IjI5ODE0MWFhLTE0ZjgtNDViYi05YjdkLTM5NTczMzJjOGZiNCIsInVzZXJfbmFtZSI6IiR1c2VySWQ6NDk0ODk4I3R5cGU6RU1QTE9ZRUUiLCJzY29wZSI6WyJFTVBMT1lFRSJdLCJ1dWlkIjoiNzVmNDJlYjItNTc5ZC00NGNmLWJiOTUtZjBiNWZkOTk5NjJhIiwianRpIjoiYTdiYWZjNzMtMWEyZC00MzJmLTllMDQtM2JmZmE3ZDU2YWM5IiwiY2xpZW50X2lkIjoicHJvdmlkZXJfd2ViIiwiY2lkIjpudWxsfQ.phlFjN6PW4hNeLDVZPdbVOGkYx8rOZcr0pNK5eip830';
-
-//     const createPatientData = {
-//         virtualPracticeId: "298141aa-14f8-45bb-9b7d-3957332c8fb4",
-//         firstName: firstNameData,
-//         lastName: "", // Since the API request does not use last name, leave it empty
-//         dateOfBirth: "01/01/1970",
-//         extId: "-" + phoneNumberData,
-//         phoneNumber: phoneNumberData,
-//         phoneCallingCode: "+91"
-//     };
-
-//     // Create patient
-//     fetch(createPatientUrl, {
-//         method: 'POST',
-//         headers: {
-//             'Authorization': token,
-//             'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify(createPatientData)
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//         // Patient created successfully
-//         console.log("Patient created:", data);
-
-//         // Search for the patient
-//         return fetch(searchPatientUrl, {
-//             method: 'POST',
-//             headers: {
-//                 'Authorization': token,
-//                 'Content-Type': 'application/json'
-//             },
-//             body: JSON.stringify({
-//                 orgId: '298141aa-14f8-45bb-9b7d-3957332c8fb4',
-//                 searchString: phoneNumberData
-//             })
-//         });
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//         // If no patient is found, display an error message
-//         if (data.patients.length === 0) {
-//             console.log("No patient found with the provided search string.");
-//             return;
-//         }
-
-//         const userUuid = data.patients[0].userUuid;
-
-//         // Save userUuid to local storage
-//         localStorage.setItem('userUuid', userUuid);
-
-//         // Display patient data in the console
-//         console.log("Patient found:", data.patients[0]);
-//     })
-//     .catch(error => {
-//         // Log any errors to the console
-//         console.error('Error:', error);
-//     });
-// });
-
-// document.getElementById('wf-form-Login-Form').addEventListener('submit', function (event) {
-//     event.preventDefault(); // Prevent the form from submitting normally
-
-//     // Get the search string entered by the user
-//     let searchString = document.getElementById('formnumber').value.trim();
-
-//     // Remove "+91" prefix if present
-//     searchString = searchString.replace(/^\+91/, '');
-
-//     // If the search string is empty, display an error message
-//     if (!searchString) {
-//         alert('Please enter a search string.');
-//         return;
-//     }
-
-//     // Make a request to the API endpoint
-//     fetch('https://api.continuouscare.in/e-api/v1.0/administration/patient/search', {
-//         method: 'POST',
-//         headers: {
-//             'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlaWQiOjI1NzExLCJ1aWQiOjQ5NDg5OCwiYXVkIjpbImNjX2FwaSJdLCJjdWlkIjpudWxsLCJldWlkIjoiYjRhNWQ3MjEtN2UzYS00MDQ4LThhODYtZTFmMjkyYmU4YzVmIiwib3VpZCI6IjI5ODE0MWFhLTE0ZjgtNDViYi05YjdkLTM5NTczMzJjOGZiNCIsInVzZXJfbmFtZSI6IiR1c2VySWQ6NDk0ODk4I3R5cGU6RU1QTE9ZRUUiLCJzY29wZSI6WyJFTVBMT1lFRSJdLCJ1dWlkIjoiNzVmNDJlYjItNTc5ZC00NGNmLWJiOTUtZjBiNWZkOTk5NjJhIiwianRpIjoiYTdiYWZjNzMtMWEyZC00MzJmLTllMDQtM2JmZmE3ZDU2YWM5IiwiY2xpZW50X2lkIjoicHJvdmlkZXJfd2ViIiwiY2lkIjpudWxsfQ.phlFjN6PW4hNeLDVZPdbVOGkYx8rOZcr0pNK5eip830',
-//             'Content-Type': 'application/json',
-//             'Cookie': 'AWSALB=ee+XsdR9tTEcuqKbBvtJUR3SeLL0YZCz6AA4+21gMYWyGIH73olZmW+OaiSzDqCuwIr5DxGqbHAnPIlHrMKeYSFrfKgqGKZkrC1KAPFkS5y2jWTo370hT/OdP58A; AWSALBCORS=ee+XsdR9tTEcuqKbBvtJUR3SeLL0YZCz6AA4+21gMYWyGIH73olZmW+OaiSzDqCuwIr5DxGqbHAnPIlHrMKeYSFrfKgqGKZkrC1KAPFkS5y2jWTo370hT/OdP58A; SESSION=417e6ca9-82e2-4cae-8515-03a08b0c8a90'
-//         },
-//         body: JSON.stringify({
-//             orgId: '298141aa-14f8-45bb-9b7d-3957332c8fb4',
-//             searchString: searchString
-//         })
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//         console.log(searchString);
-//         // If no patient is found, display an error message
-//         if (data.patients.length === 0) {
-//             console.log("No patient found with the provided search string.");
-//             return;
-//         }
-//         console.log(searchString);
-//         const userUuid = data.patients[0].userUuid;
-
-//         // Save userUuid to local storage
-//         localStorage.setItem('userUuid', userUuid);
-
-//         // Display patient data in the console
-//         console.log(data.patients[0]);
-//         console.log(searchString);
-//     })
-//     .catch(error => {
-//         console.log(searchString);
-//         // Log any errors to the console
-//         console.error('Error:', error);
-//     });
-//     console.log(searchString);
-// });
