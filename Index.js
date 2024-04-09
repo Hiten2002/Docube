@@ -43,52 +43,179 @@ function render() {
         return;
     }
 }
+// function sendOTP() {
+//     var inputPhone = $("#formnumber").val();
+//     var countryCode = $("#formnumber").intlTelInput(
+//         "getSelectedCountryData"
+//     ).dialCode;
+//     var phoneNumber = "+91" + inputPhone;
+//     console.log(phoneNumber);
+//     var appVerifier = window.recaptchaVerifier;
+//     var response = grecaptcha.getResponse();
+//     $("#numberError").text("");
+//     $("#captchaError").text("");
+//     if (phoneNumber.length < 1 || response.length == 0) {
+//         var phoneRegex = /^\+[1-9]{1}[0-9]{11,}$/;
+//         if (!phoneRegex.test(phoneNumber)) {
+//             $("#numberError").text("Please Enter Valid Phone Number.");
+//         }
+//         if (phoneNumber.length < 1) {
+//             $("#numberError").text("Phone Number Field is Required.");
+//         }
+//         if (response.length == 0) {
+//             $("#captchaError").text("Please verify you are human!");
+//         }
+//     } else {
+//         console.log(phoneNumber);
+//         firebase
+//             .auth()
+//             .signInWithPhoneNumber(phoneNumber, appVerifier)
+//             .then(function (confirmationResult) {
+//                 window.confirmationResult = confirmationResult;
+//                 coderesult = confirmationResult;
+//                 console.log("OTP is sent");
+//                 $(".otp").css("display", "block");
+//                 $("#verifyOTP").css("display", "block");
+//                 $("#resendOTP").css("display", "block");
+//                 $("#phone-number-wrapper").css("display", "none");
+//                 $("#send").css("display", "none");
+//             })
+//             .catch(function (error) {
+//                 console.log(phoneNumber);
+//                 console.log("Error sending OTP:", error);
+//                 if (error.code === "auth/invalid-phone-number") {
+//                     $("#numberError").text("Please Enter Valid Phone Number.");
+//                 }
+//             });
+//     }
+// }
+
+
 function sendOTP() {
-    var inputPhone = $("#formnumber").val();
-    var countryCode = $("#formnumber").intlTelInput(
-        "getSelectedCountryData"
-    ).dialCode;
-    var phoneNumber = "+91" + inputPhone;
-    console.log(phoneNumber);
-    var appVerifier = window.recaptchaVerifier;
-    var response = grecaptcha.getResponse();
-    $("#numberError").text("");
-    $("#captchaError").text("");
-    if (phoneNumber.length < 1 || response.length == 0) {
-        var phoneRegex = /^\+[1-9]{1}[0-9]{11,}$/;
-        if (!phoneRegex.test(phoneNumber)) {
-            $("#numberError").text("Please Enter Valid Phone Number.");
-        }
-        if (phoneNumber.length < 1) {
-            $("#numberError").text("Phone Number Field is Required.");
-        }
-        if (response.length == 0) {
-            $("#captchaError").text("Please verify you are human!");
-        }
-    } else {
-        console.log(phoneNumber);
-        firebase
-            .auth()
-            .signInWithPhoneNumber(phoneNumber, appVerifier)
-            .then(function (confirmationResult) {
-                window.confirmationResult = confirmationResult;
-                coderesult = confirmationResult;
-                console.log("OTP is sent");
-                $(".otp").css("display", "block");
-                $("#verifyOTP").css("display", "block");
-                $("#resendOTP").css("display", "block");
-                $("#phone-number-wrapper").css("display", "none");
-                $("#send").css("display", "none");
-            })
-            .catch(function (error) {
-                console.log(phoneNumber);
-                console.log("Error sending OTP:", error);
-                if (error.code === "auth/invalid-phone-number") {
-                    $("#numberError").text("Please Enter Valid Phone Number.");
-                }
-            });
-    }
+  var inputPhone = $("#formnumber").val();
+  var countryCode = $("#formnumber").intlTelInput(
+      "getSelectedCountryData"
+  ).dialCode;
+  var phoneNumber = "+91" + inputPhone;
+  console.log(phoneNumber);
+  var appVerifier = window.recaptchaVerifier;
+  var response = grecaptcha.getResponse();
+  $("#numberError").text("");
+  $("#captchaError").text("");
+  
+  // Disable button visually
+  $(".send-otp-btn").addClass("disabled");
+  // Remove click event to prevent multiple clicks
+  $(".send-otp-btn").off("click");
+  
+  if (phoneNumber.length < 1 || response.length == 0) {
+      var phoneRegex = /^\+[1-9]{1}[0-9]{11,}$/;
+      if (!phoneRegex.test(phoneNumber)) {
+          $("#numberError").text("Please Enter Valid Phone Number.");
+      }
+      if (phoneNumber.length < 1) {
+          $("#numberError").text("Phone Number Field is Required.");
+      }
+      if (response.length == 0) {
+          $("#captchaError").text("Please verify you are human!");
+      }
+      // Re-enable button after validation failure
+      $(".send-otp-btn").removeClass("disabled");
+      $(".send-otp-btn").on("click", sendOTP);
+  } else {
+      console.log(phoneNumber);
+      firebase
+          .auth()
+          .signInWithPhoneNumber(phoneNumber, appVerifier)
+          .then(function (confirmationResult) {
+              window.confirmationResult = confirmationResult;
+              coderesult = confirmationResult;
+              console.log("OTP is sent");
+              $(".spinner-border").css("display", "inline-block");
+              setTimeout(function() {
+                  $(".otp").css("display", "block");
+                  $("#verifyOTP").css("display", "block");
+                  $("#resendOTP").css("display", "block");
+                  $("#phone-number-wrapper").css("display", "none");
+                  $("#send").css("display", "none");
+                  // Re-enable button after 3 seconds
+                  $(".send-otp-btn").removeClass("disabled");
+                  $(".send-otp-btn").on("click", sendOTP);
+              }, 3000); // Display spinner after 3 seconds
+          })
+          .catch(function (error) {
+              console.log(phoneNumber);
+              console.log("Error sending OTP:", error);
+              if (error.code === "auth/invalid-phone-number") {
+                  $("#numberError").text("Please Enter Valid Phone Number.");
+              }
+              // Re-enable button after error
+              $(".send-otp-btn").removeClass("disabled");
+              $(".send-otp-btn").on("click", sendOTP);
+          });
+  }
 }
+
+
+
+
+
+
+// function sendOTP() {
+//   var inputPhone = $("#formnumber").val();
+//   var countryCode = $("#formnumber").intlTelInput(
+//       "getSelectedCountryData"
+//   ).dialCode;
+//   var phoneNumber = "+91" + inputPhone;
+//   console.log(phoneNumber);
+//   var appVerifier = window.recaptchaVerifier;
+//   var response = grecaptcha.getResponse();
+//   $("#numberError").text("");
+//   $("#captchaError").text("");
+//   if (phoneNumber.length < 1 || response.length == 0) {
+//       var phoneRegex = /^\+[1-9]{1}[0-9]{11,}$/;
+//       if (!phoneRegex.test(phoneNumber)) {
+//           $("#numberError").text("Please Enter Valid Phone Number.");
+//       }
+//       if (phoneNumber.length < 1) {
+//           $("#numberError").text("Phone Number Field is Required.");
+//       }
+//       if (response.length == 0) {
+//           $("#captchaError").text("Please verify you are human!");
+//       }
+//   } else {
+//       console.log(phoneNumber);
+//       firebase
+//           .auth()
+//           .signInWithPhoneNumber(phoneNumber, appVerifier)
+//           .then(function (confirmationResult) {
+//               window.confirmationResult = confirmationResult;
+//               coderesult = confirmationResult;
+//               console.log("OTP is sent");
+//               $(".spinner-border").css("display", "inline-block");
+//               $(".send-otp-btn").prop("disabled", true);
+//               setTimeout(function() {
+//                 $(".otp").css("display", "block");
+//                 $("#verifyOTP").css("display", "block");
+//                 $("#resendOTP").css("display", "block");
+//                 $("#phone-number-wrapper").css("display", "none");
+//                 $("#send").css("display", "none");
+//               }, 3000); // Display spinner after 3 seconds
+//           })
+//           .catch(function (error) {
+//               console.log(phoneNumber);
+//               console.log("Error sending OTP:", error);
+//               if (error.code === "auth/invalid-phone-number") {
+//                   $("#numberError").text("Please Enter Valid Phone Number.");
+//               }
+//           });
+//   }
+// }
+
+
+
+
+
 function codeverify() {
     var code = $("#formotp").val();
     var response = grecaptcha.getResponse();
@@ -130,6 +257,55 @@ function codeverify() {
             });
     }
 }
+
+function codeverify() {
+  var code = $("#formotp").val();
+  var response = grecaptcha.getResponse();
+  $("#captchaError").text("");
+  $("#enterOTP").text("");
+  $("#otpError").text("");
+  var codeRegex = /^\d{6}$/;
+  
+  // Disable the button
+  $("#verifyOTP").prop("disabled", true);
+  
+  if (code.length == 0 || response.length == 0 || !codeRegex.test(code)) {
+      if (code.length == 0) {
+          $("#enterOTP").text("Please Enter OTP");
+      } else if (!codeRegex.test(code)) {
+          $("#otpError").text("Please Enter 6-Digit OTP");
+      }
+      if (response.length == 0) {
+          $("#captchaError").text("Please verify you are human!");
+      }
+      
+      // Re-enable the button
+      $("#verifyOTP").prop("disabled", false);
+  } else {
+      coderesult
+          .confirm(code)
+          .then(function () {
+              $("#otpError").text("");
+              $("#loginsubmit").css("display", "flex");
+              $("#verifyOTP").css("display", "none");
+              $("#resendOTP").css("display", "none");
+              $("#sub").click();
+          })
+          .catch(function (error) {
+              console.error("Error occurred:", error);
+              $("#loginsubmit").css("display", "none");
+              $("#verifyOTP").prop("disabled", false); // Re-enable the button
+
+              if (error.code == "auth/invalid-verification-code") {
+                  $("#otpError").text("Please Enter Valid OTP");
+              }
+              if (error.code == "auth/code-expired") {
+                  console.log("code-expired");
+              }
+          });
+  }
+}
+
 
 function ReSendLoginOTP() {
     var inputPhone = $("#formnumber").val();
