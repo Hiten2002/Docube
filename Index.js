@@ -307,11 +307,57 @@ function codeverify() {
 }
 
 
+// function ReSendLoginOTP() {
+//     var inputPhone = $("#formnumber").val();
+//     var countryCode = $("#formnumber").intlTelInput(
+//         "getSelectedCountryData"
+//     ).dialCode;
+//     var phoneNumber = "+" + countryCode + inputPhone;
+//     console.log(phoneNumber);
+//     var appVerifier = window.recaptchaVerifier;
+//     var response = grecaptcha.getResponse();
+//     $("#numberError").text("");
+//     $(".otp-text-field").val("");
+//     $("#captchaError").text("");
+//     $(".otp-text-field").prop("disabled", true);
+//     $(".otp-text-field").first().prop("disabled", false);
+//     if (phoneNumber.length < 1 || response.length == 0) {
+//         var phoneRegex = /^\+[1-9]{1}[0-9]{10,}$/;
+//         if (phoneNumber.length < 1) {
+//             $("#numberError").text("Please Enter Valid Phone Number. phoneRegex");
+//         }
+//         if (!phoneRegex.test(phoneNumber)) {
+//             $("#numberError").text("Phone Number Field is Required.");
+//         }
+//         if (response.length == 0) {
+//             $("#captchaError").text("Please verify you are human!");
+//         }
+//     } else {
+//         firebase
+//             .auth()
+//             .signInWithPhoneNumber(phoneNumber, appVerifier)
+//             .then(function (confirmationResult) {
+//                 window.confirmationResult = confirmationResult;
+//                 coderesult = confirmationResult;
+//                 console.log("OTP is sent");
+//                 document.getElementById("formotp").value = "";
+//                 $(".otp").css("display", "block");
+//                 $("#phone-number-wrapper").css("display", "none");
+//                 $("#send").css("display", "none");
+//             })
+//             .catch(function (error) {
+//                 console.log(phoneNumber);
+//                 console.log("Error sending OTP:", error);
+//                 if (error.code === "auth/invalid-phone-number") {
+//                     $("#numberError").text("Please Enter Valid Phone Number.");
+//                 }
+//             });
+//     }
+// }
+
 function ReSendLoginOTP() {
     var inputPhone = $("#formnumber").val();
-    var countryCode = $("#formnumber").intlTelInput(
-        "getSelectedCountryData"
-    ).dialCode;
+    var countryCode = $("#formnumber").intlTelInput("getSelectedCountryData").dialCode;
     var phoneNumber = "+" + countryCode + inputPhone;
     console.log(phoneNumber);
     var appVerifier = window.recaptchaVerifier;
@@ -321,6 +367,10 @@ function ReSendLoginOTP() {
     $("#captchaError").text("");
     $(".otp-text-field").prop("disabled", true);
     $(".otp-text-field").first().prop("disabled", false);
+    
+    // Display "OTP is sent" message
+    $("#otpSentMessage").text("OTP is sent").show();
+
     if (phoneNumber.length < 1 || response.length == 0) {
         var phoneRegex = /^\+[1-9]{1}[0-9]{10,}$/;
         if (phoneNumber.length < 1) {
@@ -354,6 +404,7 @@ function ReSendLoginOTP() {
             });
     }
 }
+
 document
     .getElementById("wf-form-Login-Form")
     .addEventListener("submit", function (e) {
