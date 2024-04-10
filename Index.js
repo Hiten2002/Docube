@@ -703,14 +703,14 @@ function changeType() {
         bookButtons[i].style.display = "none"; // Hide each book button
     }
 
-    function hideBlock() {
+    // function hideBlock() {
         dataloader.style.display = "none";
         var loadButtons = document.getElementsByClassName("load");
         for (var i = 0; i < loadButtons.length; i++) {
             loadButtons[i].click(); // Trigger click event on each load button
         }
-    }
-    setTimeout(hideBlock, 4000);
+    // }
+    // setTimeout(hideBlock, 4000);
 }
 
 // function submitbtn() {
@@ -806,13 +806,11 @@ function submitbtn() {
         }
 
         if (allFieldsFilled) {
-            dataloader.style.display = "block";
+            // dataloader.style.display = "block";
 
             // Hide the dataloader after 4 seconds
             setTimeout(function () {
-                dataloader.style.display = "none";
-                // Show appointmentsuccess after 4 seconds
-                appointmentsuccess.style.display = "block";
+                // dataloader.style.display = "none";
             }, 4000);
         } else {
             console.log("Please fill in all required fields.");
@@ -836,3 +834,17 @@ document.getElementById("selectBox").addEventListener("change", function () {
         consultation.style.display = "none";
     }
 });
+
+// Get all elements with the class name 'load'
+var loadButtons = document.getElementsByClassName('load');
+
+// Iterate through each element and add event listener
+for (var i = 0; i < loadButtons.length; i++) {
+    loadButtons[i].addEventListener('click', function(event) {
+        // After 7 seconds, hide the 'appointment-success-data' div
+        setTimeout(function() {
+            document.getElementById('appointment-success-data').style.display = 'none';
+            document.getElementById('appointmentSuccess').style.display = 'block';
+        }, 7000);
+    });
+}
