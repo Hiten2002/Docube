@@ -1,11 +1,4 @@
-$("#numberError").text("");
-$("#captchaError").text("");
-$("#enterOTP").text("");
-$("#otpError").text("");
-$("#loginsubmit").css("display", "none");
-$(".otp").css("display", "none");
-$("#verifyOTP").css("display", "none");
-$("#resendOTP").css("display", "none");
+// Your Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyBVS0USwTjIiAhhk0OPkOpJx2ov-kDc73A",
     authDomain: "docube-sarvadhi.firebaseapp.com",
@@ -15,425 +8,125 @@ const firebaseConfig = {
     appId: "1:17981617263:web:87dfc45e227d38c601c99a",
     measurementId: "G-LGYGS1SWS0",
 };
+
+// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-render();
-function render() {
-    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
-        "recaptcha-container",
-        {
-            callback: function (response) {
-                console.log("reCAPTCHA solved");
-            },
-            "expired-callback": function () {
-                console.log("reCAPTCHA expiration");
-            },
-            timeout: 60000,
-        }
-    );
-    recaptchaVerifier.render();
-    var storedPhoneNumber = localStorage.getItem("phoneNumber");
-    if (storedPhoneNumber) {
-        $("#mybooking").css("display", "flex");
-        $("#mybookingres").css("display", "flex");
-        setTimeout(() => {
-            localStorage.removeItem("phoneNumber");
-            $("#mybooking").css("display", "none");
-            $("#mybookingres").css("display", "none");
-        }, 1 * 60 * 60 * 24 * 7 * 1000);
-        return;
-    }
-}
-// function sendOTP() {
-//     var inputPhone = $("#formnumber").val();
-//     var countryCode = $("#formnumber").intlTelInput(
-//         "getSelectedCountryData"
-//     ).dialCode;
-//     var phoneNumber = "+91" + inputPhone;
-//     console.log(phoneNumber);
-//     var appVerifier = window.recaptchaVerifier;
-//     var response = grecaptcha.getResponse();
-//     $("#numberError").text("");
-//     $("#captchaError").text("");
-//     if (phoneNumber.length < 1 || response.length == 0) {
-//         var phoneRegex = /^\+[1-9]{1}[0-9]{11,}$/;
-//         if (!phoneRegex.test(phoneNumber)) {
-//             $("#numberError").text("Please Enter Valid Phone Number.");
-//         }
-//         if (phoneNumber.length < 1) {
-//             $("#numberError").text("Phone Number Field is Required.");
-//         }
-//         if (response.length == 0) {
-//             $("#captchaError").text("Please verify you are human!");
-//         }
-//     } else {
-//         console.log(phoneNumber);
-//         firebase
-//             .auth()
-//             .signInWithPhoneNumber(phoneNumber, appVerifier)
-//             .then(function (confirmationResult) {
-//                 window.confirmationResult = confirmationResult;
-//                 coderesult = confirmationResult;
-//                 console.log("OTP is sent");
-//                 $(".otp").css("display", "block");
-//                 $("#verifyOTP").css("display", "block");
-//                 $("#resendOTP").css("display", "block");
-//                 $("#phone-number-wrapper").css("display", "none");
-//                 $("#send").css("display", "none");
-//             })
-//             .catch(function (error) {
-//                 console.log(phoneNumber);
-//                 console.log("Error sending OTP:", error);
-//                 if (error.code === "auth/invalid-phone-number") {
-//                     $("#numberError").text("Please Enter Valid Phone Number.");
-//                 }
-//             });
-//     }
-// }
 
+document.addEventListener("DOMContentLoaded", function () {
+    const phoneNoForm = document.getElementById('phoneNoForm');
+    const otpForm = document.getElementById('otpForm');
+    const phoneNoInput = document.getElementById('phoneNo');
+    const otpInput = document.getElementById('otp');
+    const recaptchaContainer = document.getElementById('recaptcha-container');
+    let confirmationResult;
+    let appVerifier;
 
-function sendOTP() {
-  var inputPhone = $("#formnumber").val();
-  var countryCode = $("#formnumber").intlTelInput(
-      "getSelectedCountryData"
-  ).dialCode;
-  var phoneNumber = "+91" + inputPhone;
-  console.log(phoneNumber);
-  var appVerifier = window.recaptchaVerifier;
-  var response = grecaptcha.getResponse();
-  $("#numberError").text("");
-  $("#captchaError").text("");
-  
-  // Disable button visually
-  $(".send-otp-btn").addClass("disabled");
-  // Remove click event to prevent multiple clicks
-  $(".send-otp-btn").off("click");
-  
-  if (phoneNumber.length < 1 || response.length == 0) {
-      var phoneRegex = /^\+[1-9]{1}[0-9]{11,}$/;
-      if (!phoneRegex.test(phoneNumber)) {
-          $("#numberError").text("Please Enter Valid Phone Number.");
-      }
-      if (phoneNumber.length < 1) {
-          $("#numberError").text("Phone Number Field is Required.");
-      }
-      if (response.length == 0) {
-          $("#captchaError").text("Please verify you are human!");
-      }
-      // Re-enable button after validation failure
-      $(".send-otp-btn").removeClass("disabled");
-      $(".send-otp-btn").on("click", sendOTP);
-  } else {
-      console.log(phoneNumber);
-      firebase
-          .auth()
-          .signInWithPhoneNumber(phoneNumber, appVerifier)
-          .then(function (confirmationResult) {
-              window.confirmationResult = confirmationResult;
-              coderesult = confirmationResult;
-              console.log("OTP is sent");
-              $(".spinner-border").css("display", "inline-block");
-              setTimeout(function() {
-                  $(".otp").css("display", "block");
-                  $("#verifyOTP").css("display", "block");
-                  $("#resendOTP").css("display", "block");
-                  $("#phone-number-wrapper").css("display", "none");
-                  $("#send").css("display", "none");
-                  // Re-enable button after 3 seconds
-                  $(".send-otp-btn").removeClass("disabled");
-                  $(".send-otp-btn").on("click", sendOTP);
-              }, 3000); // Display spinner after 3 seconds
-          })
-          .catch(function (error) {
-              console.log(phoneNumber);
-              console.log("Error sending OTP:", error);
-              if (error.code === "auth/invalid-phone-number") {
-                  $("#numberError").text("Please Enter Valid Phone Number.");
-              }
-              // Re-enable button after error
-              $(".send-otp-btn").removeClass("disabled");
-              $(".send-otp-btn").on("click", sendOTP);
-          });
-  }
-}
-
-
-
-
-
-
-// function sendOTP() {
-//   var inputPhone = $("#formnumber").val();
-//   var countryCode = $("#formnumber").intlTelInput(
-//       "getSelectedCountryData"
-//   ).dialCode;
-//   var phoneNumber = "+91" + inputPhone;
-//   console.log(phoneNumber);
-//   var appVerifier = window.recaptchaVerifier;
-//   var response = grecaptcha.getResponse();
-//   $("#numberError").text("");
-//   $("#captchaError").text("");
-//   if (phoneNumber.length < 1 || response.length == 0) {
-//       var phoneRegex = /^\+[1-9]{1}[0-9]{11,}$/;
-//       if (!phoneRegex.test(phoneNumber)) {
-//           $("#numberError").text("Please Enter Valid Phone Number.");
-//       }
-//       if (phoneNumber.length < 1) {
-//           $("#numberError").text("Phone Number Field is Required.");
-//       }
-//       if (response.length == 0) {
-//           $("#captchaError").text("Please verify you are human!");
-//       }
-//   } else {
-//       console.log(phoneNumber);
-//       firebase
-//           .auth()
-//           .signInWithPhoneNumber(phoneNumber, appVerifier)
-//           .then(function (confirmationResult) {
-//               window.confirmationResult = confirmationResult;
-//               coderesult = confirmationResult;
-//               console.log("OTP is sent");
-//               $(".spinner-border").css("display", "inline-block");
-//               $(".send-otp-btn").prop("disabled", true);
-//               setTimeout(function() {
-//                 $(".otp").css("display", "block");
-//                 $("#verifyOTP").css("display", "block");
-//                 $("#resendOTP").css("display", "block");
-//                 $("#phone-number-wrapper").css("display", "none");
-//                 $("#send").css("display", "none");
-//               }, 3000); // Display spinner after 3 seconds
-//           })
-//           .catch(function (error) {
-//               console.log(phoneNumber);
-//               console.log("Error sending OTP:", error);
-//               if (error.code === "auth/invalid-phone-number") {
-//                   $("#numberError").text("Please Enter Valid Phone Number.");
-//               }
-//           });
-//   }
-// }
-
-
-
-
-
-function codeverify() {
-    var code = $("#formotp").val();
-    var response = grecaptcha.getResponse();
-    $("#captchaError").text("");
-    $("#enterOTP").text("");
-    $("#otpError").text("");
-    var codeRegex = /^\d{6}$/;
-    if (code.length == 0 || response.length == 0 || !codeRegex.test(code)) {
-        if (code.length == 0) {
-            $("#enterOTP").text("Please Enter OTP");
-        } else if (!codeRegex.test(code)) {
-            $("#otpError").text("Please Enter 6-Digit OTP");
-        }
-        if (response.length == 0) {
-            $("#captchaError").text("Please verify you are human!");
-        }
-    } else {
-        coderesult
-            .confirm(code)
-            .then(function () {
-                $("#otpError").text("");
-                $("#loginsubmit").css("display", "flex");
-                $("#verifyOTP").css("display", "none");
-                $("#resendOTP").css("display", "none");
-
-                $("#sub").click();
-            })
-            .catch(function (error) {
-                console.error("Error occurred:", error);
-                $("#loginsubmit").css("display", "none");
-                $("#verifyOTP").css("display", "block");
-                $("#resendOTP").css("display", "block");
-                if (error.code == "auth/invalid-verification-code") {
-                    $("#otpError").text("Please Enter Valid OTP");
-                }
-                if (error.code == "auth/code-expired") {
-                    console.log("code-expired");
-                }
-            });
-    }
-}
-
-function codeverify() {
-  var code = $("#formotp").val();
-  var response = grecaptcha.getResponse();
-  $("#captchaError").text("");
-  $("#enterOTP").text("");
-  $("#otpError").text("");
-  var codeRegex = /^\d{6}$/;
-  
-  // Disable the button
-  $("#verifyOTP").prop("disabled", true);
-  
-  if (code.length == 0 || response.length == 0 || !codeRegex.test(code)) {
-      if (code.length == 0) {
-          $("#enterOTP").text("Please Enter OTP");
-      } else if (!codeRegex.test(code)) {
-          $("#otpError").text("Please Enter 6-Digit OTP");
-      }
-      if (response.length == 0) {
-          $("#captchaError").text("Please verify you are human!");
-      }
-      
-      // Re-enable the button
-      $("#verifyOTP").prop("disabled", false);
-  } else {
-      coderesult
-          .confirm(code)
-          .then(function () {
-              $("#otpError").text("");
-              $("#loginsubmit").css("display", "flex");
-              $("#verifyOTP").css("display", "none");
-              $("#resendOTP").css("display", "none");
-              $("#sub").click();
-          })
-          .catch(function (error) {
-              console.error("Error occurred:", error);
-              $("#loginsubmit").css("display", "none");
-              $("#verifyOTP").prop("disabled", false); // Re-enable the button
-
-              if (error.code == "auth/invalid-verification-code") {
-                  $("#otpError").text("Please Enter Valid OTP");
-              }
-              if (error.code == "auth/code-expired") {
-                  console.log("code-expired");
-              }
-          });
-  }
-}
-
-
-// function ReSendLoginOTP() {
-//     var inputPhone = $("#formnumber").val();
-//     var countryCode = $("#formnumber").intlTelInput(
-//         "getSelectedCountryData"
-//     ).dialCode;
-//     var phoneNumber = "+" + countryCode + inputPhone;
-//     console.log(phoneNumber);
-//     var appVerifier = window.recaptchaVerifier;
-//     var response = grecaptcha.getResponse();
-//     $("#numberError").text("");
-//     $(".otp-text-field").val("");
-//     $("#captchaError").text("");
-//     $(".otp-text-field").prop("disabled", true);
-//     $(".otp-text-field").first().prop("disabled", false);
-//     if (phoneNumber.length < 1 || response.length == 0) {
-//         var phoneRegex = /^\+[1-9]{1}[0-9]{10,}$/;
-//         if (phoneNumber.length < 1) {
-//             $("#numberError").text("Please Enter Valid Phone Number. phoneRegex");
-//         }
-//         if (!phoneRegex.test(phoneNumber)) {
-//             $("#numberError").text("Phone Number Field is Required.");
-//         }
-//         if (response.length == 0) {
-//             $("#captchaError").text("Please verify you are human!");
-//         }
-//     } else {
-//         firebase
-//             .auth()
-//             .signInWithPhoneNumber(phoneNumber, appVerifier)
-//             .then(function (confirmationResult) {
-//                 window.confirmationResult = confirmationResult;
-//                 coderesult = confirmationResult;
-//                 console.log("OTP is sent");
-//                 document.getElementById("formotp").value = "";
-//                 $(".otp").css("display", "block");
-//                 $("#phone-number-wrapper").css("display", "none");
-//                 $("#send").css("display", "none");
-//             })
-//             .catch(function (error) {
-//                 console.log(phoneNumber);
-//                 console.log("Error sending OTP:", error);
-//                 if (error.code === "auth/invalid-phone-number") {
-//                     $("#numberError").text("Please Enter Valid Phone Number.");
-//                 }
-//             });
-//     }
-// }
-
-function ReSendLoginOTP() {
-    var inputPhone = $("#formnumber").val();
-    var countryCode = $("#formnumber").intlTelInput("getSelectedCountryData").dialCode;
-    var phoneNumber = "+" + countryCode + inputPhone;
-    console.log(phoneNumber);
-    var appVerifier = window.recaptchaVerifier;
-    var response = grecaptcha.getResponse();
-    $("#numberError").text("");
-    $(".otp-text-field").val("");
-    $("#captchaError").text("");
-    $(".otp-text-field").prop("disabled", true);
-    $(".otp-text-field").first().prop("disabled", false);
-    
-    // Display "OTP is sent" message
-    $("#otpSentMessage").text("OTP is sent").show();
-
-    if (phoneNumber.length < 1 || response.length == 0) {
-        var phoneRegex = /^\+[1-9]{1}[0-9]{10,}$/;
-        if (phoneNumber.length < 1) {
-            $("#numberError").text("Please Enter Valid Phone Number. phoneRegex");
-        }
-        if (!phoneRegex.test(phoneNumber)) {
-            $("#numberError").text("Phone Number Field is Required.");
-        }
-        if (response.length == 0) {
-            $("#captchaError").text("Please verify you are human!");
-        }
-    } else {
-        firebase
-            .auth()
-            .signInWithPhoneNumber(phoneNumber, appVerifier)
-            .then(function (confirmationResult) {
-                window.confirmationResult = confirmationResult;
-                coderesult = confirmationResult;
-                console.log("OTP is sent");
-                document.getElementById("formotp").value = "";
-                $(".otp").css("display", "block");
-                $("#phone-number-wrapper").css("display", "none");
-                $("#send").css("display", "none");
-            })
-            .catch(function (error) {
-                console.log(phoneNumber);
-                console.log("Error sending OTP:", error);
-                if (error.code === "auth/invalid-phone-number") {
-                    $("#numberError").text("Please Enter Valid Phone Number.");
-                }
-            });
-    }
-}
-
-document
-    .getElementById("wf-form-Login-Form")
-    .addEventListener("submit", function (e) {
-        var phoneNumber = $("#formnumber").val();
-        var countryCode = $("#formnumber").intlTelInput(
-            "getSelectedCountryData"
-        ).dialCode;
-        var mergedValue = "+" + countryCode + phoneNumber;
-        $("#formnumber").val(mergedValue);
-        console.log($("#formnumber").val());
-        localStorage.setItem("phoneNumber", phoneNumber);
-        setTimeout(() => {
-            localStorage.removeItem("phoneNumber");
-            $("#mybooking").css("display", "none");
-            $("#mybookingres").css("display", "none");
-        }, 1 * 60 * 60 * 24 * 7 * 1000);
-        if (localStorage.getItem("phoneNumber")) {
-            $("#mybooking").css("display", "flex");
-            $("#mybookingres").css("display", "flex");
-        }
+    $("#phoneNo").intlTelInput({
+        initialCountry: "in",
+        separateDialCode: true,
     });
-$("#formnumber").intlTelInput({
-    initialCountry: "in",
-    separateDialCode: true,
+
+    // Function to handle phone number form submission
+    const handlePhoneNoSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const countryCode = $("#phoneNo").intlTelInput("getSelectedCountryData").dialCode;
+            const phoneNumber = phoneNoInput.value.trim();
+            const fullPhoneNumber = "+" + countryCode + phoneNumber;
+
+            if (!appVerifier) {
+                appVerifier = new firebase.auth.RecaptchaVerifier(recaptchaContainer, {
+                    size: 'invisible',
+                    callback: () => {
+                        console.log('reCAPTCHA resolved..');
+                    }
+                });
+            }
+
+            // Sign in with the provided phone number
+            const confirmation = await firebase.auth().signInWithPhoneNumber(fullPhoneNumber, appVerifier);
+            confirmationResult = confirmation;
+            otpForm.style.display = 'block';
+            phoneNoForm.style.display = 'none';
+        } catch (error) {
+            console.error('Error sending verification code: ', error);
+        }
+    };
+
+    const handleOtpSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            var code = document.getElementById('otp').value;
+            const result = await confirmationResult.confirm(code);
+            const user = result.user;
+            if (user) {
+                console.log('User Logged In Successfully:', user);
+                const countryCode = $("#phoneNo").intlTelInput("getSelectedCountryData").dialCode;
+                const phoneNumber = "+" + countryCode + phoneNoInput.value.trim();
+                localStorage.setItem('phoneNumber', phoneNumber);
+                $("#mybooking").css("display", "none");
+                $("#mybookingres").css("display", "none");
+
+                setTimeout(() => {
+                    localStorage.removeItem("phoneNumber");
+                    $("#mybooking").css("display", "none");
+                    $("#mybookingres").css("display", "none");
+                }, 7 * 24 * 60 * 60 * 1000);
+
+                changeType();
+            } else {
+                console.error('User object is undefined');
+            }
+        } catch (error) {
+            console.error('Error verifying OTP: ', error);
+
+            if (error.code == "auth/invalid-verification-code") {
+                $("#otpError").text("Please Enter Valid OTP");
+            }
+            if (error.code == "auth/code-expired") {
+                console.log("code-expired");
+            }
+        }
+    };
+
+    // Function to initialize reCAPTCHA verifier
+    const initializeRecaptcha = () => {
+        if (!appVerifier) {
+            appVerifier = new firebase.auth.RecaptchaVerifier(recaptchaContainer, {
+                size: 'invisible',
+                callback: () => {
+                    console.log('reCAPTCHA resolved..');
+                }
+            });
+        }
+    };
+
+    // Function to handle resend OTP button click
+    const handleResendOTP = async () => {
+        $("#sendotp").text("OTP is sent");
+        try {
+            initializeRecaptcha(); // Initialize reCAPTCHA
+            const countryCode = $("#phoneNo").intlTelInput("getSelectedCountryData").dialCode;
+            const phoneNumber = "+" + countryCode + phoneNoInput.value.trim();
+            const confirmation = await firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier);
+            confirmationResult = confirmation;
+        } catch (error) {
+            console.error('Error sending verification code: ', error);
+        }
+    };
+    $("#sendotp").text("");
+
+    phoneNoForm.addEventListener('submit', handlePhoneNoSubmit);
+    otpForm.addEventListener('submit', handleOtpSubmit);
+    document.getElementById('resendOTP').addEventListener('click', handleResendOTP);
 });
+
+
 
 let digitValidate = function (ele) {
     ele.value = ele.value.replace(/[^0-9]/g, "").substring(0, 1);
 };
+
 const inputs = document.querySelectorAll(".otp-text-field");
 inputs.forEach((input, index1) => {
     input.addEventListener("keyup", (e) => {
@@ -483,7 +176,7 @@ function tabChanges(event, index) {
         }
     }
 }
-const combinedInput = document.getElementById("formotp");
+const combinedInput = document.getElementById("otp");
 otp.forEach((input) => {
     input.addEventListener("input", function () {
         let combinedValue = "";
@@ -507,73 +200,110 @@ otp.forEach((input) => {
     });
 });
 
-// $(document).ready(function () {
-//     $('#book-appointment-button').click(function (e) {
-//         var patientname = $('#patientName').val();
-//         var location = $('#locationBox').val();
-//         var service = $('#selectBox').val();
-//         var datebox = $('#datebox').val();
-//         var storedNumClick = localStorage.getItem('phoneNumber');
+document.getElementById('otpForm').addEventListener('submit', function (event) {
+    event.preventDefault();
 
-//         // Reset error messages and input field styles
-//         $('#patient-box-error').text('');
-//         $('#select-box-error').text('');
-//         $('#location-box-error').text('');
-//         $('#date-box-error').text('');
-//         $('#radio-box-error').text('');
+    const firstNameData = document.getElementById('patientName').value.trim();
+    const phoneNumberData = document.getElementById('phoneNo').value.trim(); // Fixed the ID here
 
-//         if (patientname === '') {
-//             $('#patient-box-error').text('Please enter patient name');
-//             $('#patientName').addClass('error');
-//             e.preventDefault(); // Prevent the default form submission
-//             return; // Stop further execution
-//         }
+    const createPatientUrl = 'https://ccapi.continuouscare.in/e-api/v1.0/administration/patient/create';
+    const searchPatientUrl = 'https://api.continuouscare.in/e-api/v1.0/administration/patient/search';
+    const token = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlaWQiOjI1NzExLCJ1aWQiOjQ5NDg5OCwiYXVkIjpbImNjX2FwaSJdLCJjdWlkIjpudWxsLCJldWlkIjoiYjRhNWQ3MjEtN2UzYS00MDQ4LThhODYtZTFmMjkyYmU4YzVmIiwib3VpZCI6IjI5ODE0MWFhLTE0ZjgtNDViYi05YjdkLTM5NTczMzJjOGZiNCIsInVzZXJfbmFtZSI6IiR1c2VySWQ6NDk0ODk4I3R5cGU6RU1QTE9ZRUUiLCJzY29wZSI6WyJFTVBMT1lFRSJdLCJ1dWlkIjoiNzVmNDJlYjItNTc5ZC00NGNmLWJiOTUtZjBiNWZkOTk5NjJhIiwianRpIjoiYTdiYWZjNzMtMWEyZC00MzJmLTllMDQtM2JmZmE3ZDU2YWM5IiwiY2xpZW50X2lkIjoicHJvdmlkZXJfd2ViIiwiY2lkIjpudWxsfQ.phlFjN6PW4hNeLDVZPdbVOGkYx8rOZcr0pNK5eip830';
 
-//         if (service === null) {
-//             $('#select-box-error').text('Please select a service');
-//             $('#selectBox').addClass('error');
-//             e.preventDefault(); // Prevent the default form submission
-//             return; // Stop further execution
-//         }
+    const createPatientData = {
+        virtualPracticeId: "298141aa-14f8-45bb-9b7d-3957332c8fb4",
+        firstName: firstNameData,
+        lastName: "",
+        dateOfBirth: "01/01/1970",
+        extId: "-" + phoneNumberData,
+        phoneNumber: phoneNumberData,
+        phoneCallingCode: "+91"
+    };
 
-//         if (location === null) {
-//             $('#location-box-error').text('Please select a location');
-//             $('#locationBox').addClass('error');
-//             e.preventDefault(); // Prevent the default form submission
-//             return; // Stop further execution
-//         }
+    fetch(createPatientUrl, {
+        method: 'POST',
+        headers: {
+            'Authorization': token,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(createPatientData)
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Patient created:", data);
 
-//         if (datebox === '') {
-//             $('#date-box-error').text('Please select a date');
-//             $('#datebox').addClass('error');
-//             e.preventDefault(); // Prevent the default form submission
-//             return; // Stop further execution
-//         }
+            return fetch(searchPatientUrl, {
+                method: 'POST',
+                headers: {
+                    'Authorization': token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    orgId: '298141aa-14f8-45bb-9b7d-3957332c8fb4',
+                    searchString: phoneNumberData
+                })
+            });
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.patients.length === 0) {
+                console.log("No patient found with the provided search string.");
+                return;
+            }
 
-//         if (!$('.timeslotinput').is(':checked')) {
-//             $('#radio-box-error').text('Please select a time slot'); // Corrected id reference
-//             $('.timeslotinput').addClass('error');
-//             e.preventDefault(); // Prevent the default form submission
-//             return; // Stop further execution
-//         }
+            const uuid = data.patients[0].uuid;
+            localStorage.setItem('uuid', uuid);
+            console.log();
+            console.log("Patient found:", data.patients[0]);
+        })
 
-//         if (storedNumClick === null) {
-//             $('#loginformbox').css('display', 'block');
-//             e.preventDefault(); // Prevent the default form submission
-//             return; // Stop further execution
-//         } else {
-//             // Auto-submit the form here
-//             $('#appointment-form').submit();
-//         }
-//     });
-// });
+        .catch(error => {
+            console.error('Error:', error);
+        });
+});
 
+document.getElementById("book-appointment-form").addEventListener("submit", function(event) {
+    event.preventDefault(); // Prevent the form from submitting normally
+
+    // Get the value of the input field
+    var patientName = document.getElementById("patientName").value;
+
+    // Save the value to local storage
+    localStorage.setItem("patientName", patientName);
+
+});
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const patientName = localStorage.getItem('patientName');
+    const patientNameInput = document.getElementById('patientName');
+
+    if (patientName) {
+        patientNameInput.value = patientName;
+        patientNameInput.disabled = true;
+    } else {
+        // If fullName doesn't exist in localStorage, input remains active
+        patientNameInput.disabled = false;
+    }
+});
+
+
+function changeType() {
+    var loginFormBox = document.getElementById("loginformbox");
+
+    loginFormBox.style.display = "none";
+
+    var loadButtons = document.getElementsByClassName("load");
+    for (var i = 0; i < loadButtons.length; i++) {
+        loadButtons[i].click(); // Trigger click event on each load button
+    }
+}
+
+// book appointment form Error and Remove Function
 $(document).ready(function () {
-    // Function to clear errors messages
     function clearErrors() {
-        $(
-            "#patient-box-error, #location-box-error, #select-box-error, #date-box-error"
-        ).text("");
+        $("#patient-box-error, #location-box-error, #select-box-error, #date-box-error").text("");
         $("#radio-box-error").text("");
     }
 
@@ -603,9 +333,7 @@ $(document).ready(function () {
 
     $("#book-appointment-button").click(function (e) {
         e.preventDefault(); // Prevent default form submission
-
         var errors = false; // Flag to track errors
-
         var patientname = $("#patientName").val();
         var location = $("#locationBox").val();
         var service = $("#selectBox").val();
@@ -649,7 +377,7 @@ $(document).ready(function () {
                 $("#radio-box-error").text("Please select a time slot");
                 errors = true;
             }
-         
+
         }
 
         // Check if all fields are filled and storedPhoneNumber is null
@@ -668,106 +396,7 @@ $(document).ready(function () {
     });
 });
 
-// function changeType() {
-//     var loginFormBox = document.getElementById("loginformbox");
-//     var bookButtons = document.getElementsByClassName("data");
-//     if (loginFormBox) {
-//         loginFormBox.style.display = "none";
-//         for (var i = 0; i < bookButtons.length; i++) {
-//             bookButtons[i].style.display = "none"; // Hide each book button
-//         }
-//     }
 
-//     var loadButtons = document.getElementsByClassName("load");
-//     for (var i = 0; i < loadButtons.length; i++) {
-//         loadButtons[i].click(); // Trigger click event on each load button
-//     }
-// }
-document.addEventListener("DOMContentLoaded", function () {
-    var loginForm = document.getElementById("wf-form-Login-Form");
-    loginForm.addEventListener("submit", function (event) {
-        event.preventDefault(); // Prevent the default form submission behavior
-        changeType(); // Call the changeType function
-    });
-});
-
-function changeType() {
-    var loginFormBox = document.getElementById("loginformbox");
-    var bookButtons = document.getElementsByClassName("data");
-    var dataloader = document.getElementById("dataloader");
-
-    loginFormBox.style.display = "none";
-    dataloader.style.display = "block";
-
-    for (var i = 0; i < bookButtons.length; i++) {
-        bookButtons[i].style.display = "none"; // Hide each book button
-    }
-
-    // function hideBlock() {
-        dataloader.style.display = "none";
-        var loadButtons = document.getElementsByClassName("load");
-        for (var i = 0; i < loadButtons.length; i++) {
-            loadButtons[i].click(); // Trigger click event on each load button
-        }
-    // }
-    // setTimeout(hideBlock, 4000);
-}
-
-// function submitbtn() {
-//     var mybooking = document.getElementById("mybooking");
-//     var dataloader = document.getElementById("dataloader");
-//     var appointmentsuccess = document.getElementById("appointment-success-data");
-
-//     // Check if mybooking is initially set to display: block
-//     if (getComputedStyle(mybooking).display === "flex" ) {
-//       document.getElementById('wf-form-Login-Form').addEventListener('submit', function (event) {
-//         dataloader.style.display = "block";
-//         setTimeout(function() {
-//             dataloader.style.display = "none";
-//             // Show appointmentsuccess after 4 seconds
-//             appointmentsuccess.style.display = "block";
-//         }, 4000);
-
-//       })
-
-//         // Hide the dataloader after 4 seconds
-//     }
-// }
-
-// function submitbtn() {
-//   var mybooking = document.getElementById("mybooking");
-//   var dataloader = document.getElementById("dataloader");
-//   var appointmentsuccess = document.getElementById("appointment-success-data");
-
-//   // Check if mybooking is initially set to display: block
-//   if (getComputedStyle(mybooking).display === "flex") {
-//       // Check if any form field is blank
-//       var formFields = document.forms["book-appointment-form"].getElementsByTagName("input");
-//       var allFieldsFilled = true;
-//       for (var i = 0; i < formFields.length; i++) {
-//         if (formFields[i].type === "text" && formFields[i].value === "") {
-//             allFieldsFilled = false;
-//             break;
-//         } else if (formFields[i].type === "radio" && !formFields[i].checked) {
-//             allFieldsFilled = false;
-//             break;
-//         }
-//     }
-
-//       if (allFieldsFilled) {
-//           dataloader.style.display = "block";
-
-//           // Hide the dataloader after 4 seconds
-//           setTimeout(function() {
-//               dataloader.style.display = "none";
-//               // Show appointmentsuccess after 4 seconds
-//               appointmentsuccess.style.display = "block";
-//           }, 4000);
-//       } else {
-
-//       }
-//   }
-// }
 function submitbtn() {
     var mybooking = document.getElementById("mybooking");
     var dataloader = document.getElementById("dataloader");
@@ -806,11 +435,7 @@ function submitbtn() {
         }
 
         if (allFieldsFilled) {
-            // dataloader.style.display = "block";
-
-            // Hide the dataloader after 4 seconds
             setTimeout(function () {
-                // dataloader.style.display = "none";
             }, 4000);
         } else {
             console.log("Please fill in all required fields.");
@@ -840,11 +465,12 @@ var loadButtons = document.getElementsByClassName('load');
 
 // Iterate through each element and add event listener
 for (var i = 0; i < loadButtons.length; i++) {
-    loadButtons[i].addEventListener('click', function(event) {
+    loadButtons[i].addEventListener('click', function (event) {
         // After 7 seconds, hide the 'appointment-success-data' div
-        setTimeout(function() {
+        setTimeout(function () {
             document.getElementById('appointment-success-data').style.display = 'none';
             document.getElementById('appointmentSuccess').style.display = 'block';
-        }, 7000);
+        }, 8000);
     });
 }
+
