@@ -479,7 +479,7 @@ document.getElementById("selectBox").addEventListener("change", function () {
     if (selectedValue === "Video Consultation") {
         video.style.display = "flex";
         consultation.style.display = "none";
-    } else if (selectedValue === "For In-Person Consultation") {
+    } else if (selectedValue === "In-Person Consultation") {
         video.style.display = "none";
         consultation.style.display = "flex";
     } else {
