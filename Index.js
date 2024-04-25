@@ -91,11 +91,12 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         } catch (error) {
             console.error('Error verifying OTP: ', error);
- 
+            const verifyotpbtn = document.querySelector('.verify-otp-btn');
             if (error.code == "auth/invalid-verification-code") {
                 const otpError = document.getElementById('otpError'); // Get the element by its id
                 if (otpError) {
                     otpError.textContent = 'Please enter a Valid OTP'; // Set error message
+                    verifyotpbtn.disabled = false;
                 }
             }
             if (error.code == "auth/code-expired") {
