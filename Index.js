@@ -1,12 +1,12 @@
 // Your Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyBVS0USwTjIiAhhk0OPkOpJx2ov-kDc73A",
-    authDomain: "docube-sarvadhi.firebaseapp.com",
-    projectId: "docube-sarvadhi",
-    storageBucket: "docube-sarvadhi.appspot.com",
-    messagingSenderId: "17981617263",
-    appId: "1:17981617263:web:87dfc45e227d38c601c99a",
-    measurementId: "G-LGYGS1SWS0",
+    apiKey: "AIzaSyAS-Nw8goYPAZ1AmbTZQIh5wLdpM-m0ZWY",   
+    authDomain: "docube-website.firebaseapp.com",   
+    projectId: "docube-website",   
+    storageBucket: "docube-website.appspot.com",   
+    messagingSenderId: "200646445092",   
+    appId: "1:200646445092:web:2597df3a3d62cf4e8ef0b1",   
+    measurementId: "G-THT2SVEG71"
 };
  
 // Initialize Firebase
