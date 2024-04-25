@@ -55,10 +55,11 @@ document.addEventListener("DOMContentLoaded", function () {
  
         } catch (error) {
             console.error('Error sending verification code: ', error);
-        } finally {
-            // Enable the button regardless of success or failure
-            sendOtpButton.disabled = false;
-        }
+        } 
+        // finally {
+        //     // Enable the button regardless of success or failure
+        //     sendOtpButton.disabled = false;
+        // }
     };
  
     const handleOtpSubmit = async (e) => {
@@ -67,6 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const verifyotpbtn = document.querySelector('.verify-otp-btn');
             verifyotpbtn.disabled = true;
             var code = document.getElementById('otp').value;
+            var otpError = document.getElementById('otpError');
             const result = await confirmationResult.confirm(code);
             const user = result.user;
             if (user) {
@@ -91,15 +93,14 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error('Error verifying OTP: ', error);
  
             if (error.code == "auth/invalid-verification-code") {
-                $("#otpError").text("Please Enter Valid OTP");
+                const otpError = document.getElementById('otpError'); // Get the element by its id
+                if (otpError) {
+                    otpError.textContent = 'Please enter a Valid OTP'; // Set error message
+                }
             }
             if (error.code == "auth/code-expired") {
                 console.log("code-expired");
             }
-        }
-        finally {
-            // Enable the button regardless of success or failure
-            verifyotpbtn.disabled = false;
         }
     };
  
